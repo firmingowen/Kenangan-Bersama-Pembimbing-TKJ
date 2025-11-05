@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kenangan Bersama Pembimbing TKJ</title>
+  <style>
+    :root {
+      --radius: 16px;
+      --shadow: 0 6px 20px rgba(0,0,0,0.12);
+      --primary: #0b76ff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; scroll-behavior: smooth; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-image: linear-gradient(rgba(4,9,30,0.7)),url('ultah bang iwan 1.jpg');
+      background-attachment: fixed;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: #333;
+      overflow-x: hidden;
+    }
+
+    /* INTRO */
+    #intro {
+      position: fixed; inset: 0;
+      background: linear-gradient(135deg, #aee1ff, #f5faff);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      z-index: 999; opacity: 1; transition: opacity 1s ease;
+    }
+    #intro.hidden { opacity: 0; pointer-events: none; }
+    #intro h1 { font-size: 2.5rem; color: var(--primary); margin-bottom: 20px; animation: fadeIn 1.2s ease; }
+    #enterBtn {
+      padding: 12px 24px; background: var(--primary); border: none; color: white;
+      font-size: 1.2rem; border-radius: var(--radius); cursor: pointer; box-shadow: var(--shadow);
+      animation: fadeIn 1.5s ease;
+    }
+    #emojiLoad { display: none; font-size: 3rem; margin-top: 20px; animation: emojiFade 1s ease infinite alternate; }
+    @keyframes emojiFade { from{opacity:0.4;transform:scale(0.9);} to{opacity:1;transform:scale(1.1);} }
+    @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+
+    /* HEADER */
+    header {
+      width: 100%; background: white; box-shadow: var(--shadow);
+      position: fixed; top: 0; left: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center; padding: 10px 30px;
+      transition: background 0.5s ease;
+    }
+    header h2 { color: var(--primary); transition: color 0.5s ease; }
+    nav { display: flex; gap: 20px; transition: opacity 0.5s ease; }
+    nav a { text-decoration: none; color: #333; font-weight: 500; transition: color 0.3s; }
+    nav a:hover { color: var(--primary); }
+
+    .hamburger { display: none; flex-direction: column; gap: 4px; cursor: pointer; }
+    .hamburger span { width: 25px; height: 3px; background: #333; border-radius: 2px; }
+    @media(max-width:768px){
+      nav{display:none;flex-direction:column;background:white;position:absolute;top:60px;right:0;width:200px;box-shadow:var(--shadow);padding:10px 0;}
+      nav.active{display:flex;}
+      .hamburger{display:flex;}
+    }
+
+    /* TRANSISI SECTION */
+    section {
+      min-height: 100vh;
+      padding: 100px 20px 40px;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 1.2s ease, transform 1.2s ease;
+    }
+    section.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    h1{text-align:center;color:var(--primary);margin-bottom:20px;}
+
+    /* SLIDER FOTO */
+    .slider-container {
+      position: relative; width: 90%; max-width: 700px; margin: auto;
+      overflow: hidden; border-radius: var(--radius); box-shadow: var(--shadow); background: #fff;
+    }
+    .slides { display: flex; transition: transform 1.2s cubic-bezier(0.25, 0.1, 0.25, 1); }
+    .slide { min-width: 100%; position: relative; opacity: 0.5; transition: opacity 1s ease; }
+    .slide.active { opacity: 1; }
+    .slide img { width: 100%; height: 400px; object-fit: cover; border-radius: var(--radius); }
+    .caption {
+      position: absolute; bottom: 0; background: rgba(0,0,0,0.4); color: #fff;
+      width: 100%; padding: 10px; border-radius: 0 0 var(--radius) var(--radius);
+    }
+    .controls { position: absolute; top: 50%; width: 100%; display: flex; justify-content: space-between; transform: translateY(-50%); }
+    .controls button { background: rgba(255,255,255,0.7); border: none; border-radius: 50%; padding: 8px; cursor: pointer; }
+
+    /* VIDEO SLIDER */
+    .video-slider { width:90%;max-width:700px;margin:40px auto;overflow:hidden;position:relative;border-radius:var(--radius);box-shadow:var(--shadow);background:#fff; }
+    .video-slides { display:flex; transition:transform 0.8s ease-in-out; }
+    .video-slide { min-width:100%; }
+    .video-slide video { width:100%; display:block; border-radius:var(--radius); }
+    .video-controls { position:absolute;top:50%;width:100%;display:flex;justify-content:space-between;transform:translateY(-50%); }
+    .video-controls button { background:rgba(255,255,255,0.7);border:none;border-radius:50%;padding:8px;cursor:pointer; }
+
+    /* ABOUT */
+    #about{background:#f9fcff;text-align:center;}
+    .typing{font-size:1.2rem;color:#444;margin-top:20px;white-space:pre-line;min-height:80px;}
+
+    /* ALBUM FOTO */
+    #album { background-image: linear-gradient(rgba(4,9,30,0.7)),url('ultah bang iwan.jpg');
+      background-attachment: fixed;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+       text-align: center; }
+    #album h1 { font-size: 2.8rem; color: var(--primary); margin-bottom: 10px; }
+    #album h2 { font-size: 1.4rem; color: #555; margin-bottom: 30px; }
+    .album { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; padding: 20px; }
+    .album img {
+      width: 100%; height: 250px; object-fit: cover; border-radius: var(--radius); box-shadow: var(--shadow);
+      opacity: 0; transform: translateY(30px); transition: opacity 1s ease, transform 1s ease, transform 0.3s ease; cursor: pointer;
+    }
+    .album img.active { opacity: 1; transform: translateY(0); }
+    .album img:hover { transform: scale(1.05); }
+
+    /* BUTTONS */
+    .album-buttons {
+      margin-top: 30px;
+      text-align: center;
+    }
+    .album-buttons button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      padding: 10px 18px;
+      margin: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .album-buttons button:hover {
+      background: #095bcc;
+    }
+
+    /* POPUP FOTO */
+    .popup {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: flex; align-items: center; justify-content: center;
+      visibility: hidden; opacity: 0; transition: opacity 0.5s ease; z-index: 1000;
+    }
+    .popup.active { visibility: visible; opacity: 1; }
+    .popup img { max-width: 90%; max-height: 85%; border-radius: var(--radius); box-shadow: 0 0 30px rgba(255,255,255,0.3); animation: zoomIn 0.5s ease; }
+    @keyframes zoomIn { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+    /* MUSIC BUTTON */
+    #musicBtn {
+      position: fixed; bottom: 20px; right: 20px;
+      background: rgba(255,255,255,0.8);
+      border: none; border-radius: 50%;
+      box-shadow: var(--shadow); cursor: pointer;
+      font-size: 22px; padding: 12px; z-index: 200;
+    }
+    #musicBtn.spin { animation: spin 4s linear infinite; }
+    @keyframes spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <!-- INTRO -->
+  <div id="intro">
+    <h1>Selamat Datang di Album Kenangan</h1>
+    <button id="enterBtn">Masuk Album</button>
+    <div id="emojiLoad">😊✨</div>
+  </div>
+
+  <header id="mainHeader" style="display:none;">
+    <h2>Kenangan TKJ</h2>
+    <nav id="nav">
+      <a href="">Home</a>
+      <a href="">Tentang Umum</a>
+      <a href="">Album Umum</a>
+      <a href="#album">Album TKJ</a>
+    </nav>
+    <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  </header>
+
+  <div id="content" style="display:none;">
+
+    <!-- HOME -->
+    <section id="home">
+      <div class="slider-container">
+        <div class="slides">
+          <div class="slide active"><img src="ultah bang iwan.jpg"><div class="caption">TKJ 2025 🌅</div></div>
+          <div class="slide"><img src="ultah bang iwan 1.jpg"><div class="caption">TIM TKJ 🏖️</div></div>
+          <div class="slide"><img src="ultah bang iwan 2.jpg"><div class="caption">PELINDO TKJ 2025 🎈</div></div>
+        </div>
+        <div class="controls"><button id="prev">⟨</button><button id="next">⟩</button></div>
+      </div>
+
+      <!-- VIDEO SLIDER -->
+      <div class="video-slider">
+        <div class="video-slides">
+          <div class="video-slide"><video src="vidio ultah.mp4" controls></video></div>
+          <div class="video-slide"><video src="vidio ti ultah.mp4" controls></video></div>
+          <div class="video-slide"><video src="potong kue.mp4" controls></video></div>
+        </div>
+        <div class="video-controls"><button id="prevVid">⟨</button><button id="nextVid">⟩</button></div>
+      </div>
+    </section>
+    <!-- ALBUM -->
+    <section id="album">
+      <h1>Album TKJ</h1>
+      <h2>Kumpulan momen indah yang tak terlupakan 📸</h2>
+      <div class="album">
+        <img src="dede di suap.jpg">
+        <img src="salma suap .jpg">
+        <img src="nadia suap.jpg">
+        <img src="owen di suap.jpg">
+        <img src="vino di suap.jpg">
+        <img src="febri di suap.jpg">
+        <img src="muka bang iwan.jpg">
+        <img src="muka bang iwan 2.jpg">
+        <img src="muka bang iwan 3.jpg">
+        <img src="ultah bang iwan 1.jpg" alt="">
+        <img src="ultah bang iwan 2.jpg" alt="">
+        <img src="ultah bang iwan.jpg" alt="">
+        <img src="badmin.jpg" alt="">
+        <img src="Foto nonkrong.jpg" alt="">
+        <img src="bintang.jpg" alt="">
+        <img src="melingkar.jpg" alt="">
+        <img src="melingkar 2.jpg" alt="">
+        <img src="melingkar 3.jpg" alt="">
+        <img src="pasukan 2.jpg" alt="">
+        <img src="pasukan 3.jpg" alt="">
+        <img src="pasukan.jpg" alt="">
+        
+        
+        <img src="muka di zoom.JPG" alt="">
+        <img src="gila 2.jpg" alt="">
+        <img src="gila 3.jpg" alt=""> 
+        <img src="gila 1.jpg" alt="">
+        <img src="Dermaga.jpg" alt="">
+        <img src="vino dermaga.jpg" alt="">
+        <img src="vino dermaga 2.jpg" alt="">
+        <img src="nadia dermaga.jpg" alt="">
+        <img src="salma dermaga.jpg" alt="">
+        <img src="salwa dermaga.jpg" alt="">
+        <img src="dermaga 2.jpg" alt="">
+        <img src="gelap.jpg" alt="">
+        <img src="terang.jpg" alt="">
+        <img src="pmi.jpg" alt="">
+        <img src="sakit.jpg" alt="">
+        <img src="vino ma bang iwan.jpg" alt="">
+      </div>
+    </section>
+  </div>
+
+  <!-- POPUP FOTO -->
+  <div class="popup" id="popup">
+    <img id="popupImg" src="">  
+  </div>
+
+  <audio id="bgMusic" loop>
+    <source src="Di Ujung Jalan - Samsons Piano Karaoke by Andre Panggabean.mp3" type="audio/mpeg">
+  </audio>
+  <button id="musicBtn" style="display:none;">🎵</button>
+
+  <script>
+    const intro = document.getElementById('intro');
+    const enterBtn = document.getElementById('enterBtn');
+    const emojiLoad = document.getElementById('emojiLoad');
+    const header = document.getElementById('mainHeader');
+    const content = document.getElementById('content');
+    const musicBtn = document.getElementById('musicBtn');
+    const music = document.getElementById('bgMusic');
+    const popup = document.getElementById('popup');
+    const popupImg = document.getElementById('popupImg');
+
+    // INTRO
+    enterBtn.onclick = () => {
+      enterBtn.style.display = 'none';
+      emojiLoad.style.display = 'block';
+      setTimeout(() => {
+        intro.classList.add('hidden');
+        setTimeout(() => {
+          intro.style.display = 'none';
+          header.style.display = 'flex';
+          content.style.display = 'block';
+          musicBtn.style.display = 'block';
+          music.play().then(()=>{ playing = true; musicBtn.classList.add('spin'); }).catch(()=>{});
+        }, 1000);
+      }, 1000);
+    };
+
+    // MUSIC
+    let playing = false;
+    musicBtn.onclick = () => {
+      playing = !playing;
+      if (playing){ music.play(); musicBtn.classList.add('spin'); }
+      else { music.pause(); musicBtn.classList.remove('spin'); }
+    };
+
+    // NAVBAR
+    const burger=document.getElementById('hamburger');
+    const nav=document.getElementById('nav');
+    burger.onclick=()=>nav.classList.toggle('active');
+
+    // SLIDER FOTO
+    const slides=document.querySelector('.slides');
+    const slide=document.querySelectorAll('.slide');
+    let index=0;
+    document.getElementById('next').onclick=()=>{index++;showSlide();}
+    document.getElementById('prev').onclick=()=>{index--;showSlide();}
+    function showSlide(){
+      if(index<0)index=slide.length-1;
+      else if(index>=slide.length)index=0;
+      slides.style.transform=`translateX(${-index*100}%)`;
+      slide.forEach((s,i)=>s.classList.toggle('active',i===index));
+    }
+    setInterval(()=>{index++;showSlide();},4000);
+
+    // VIDEO SLIDER
+    const vidSlides=document.querySelector('.video-slides');
+    const vidSlide=document.querySelectorAll('.video-slide');
+    let vidIndex=0;
+    document.getElementById('nextVid').onclick=()=>{vidIndex++;showVid();}
+    document.getElementById('prevVid').onclick=()=>{vidIndex--;showVid();}
+    function showVid(){
+      if(vidIndex<0)vidIndex=vidSlide.length-1;
+      else if(vidIndex>=vidSlide.length)vidIndex=0;
+      vidSlides.style.transform=`translateX(${-vidIndex*100}%)`;
+    }
+
+    // SCROLL FADE
+    const sections=document.querySelectorAll('section');
+    const reveal=()=>{sections.forEach(sec=>{
+      const top=sec.getBoundingClientRect().top;
+      if(top<window.innerHeight-100)sec.classList.add('active');
+    });};
+    window.addEventListener('scroll',reveal);reveal();
+
+    // TYPING EFFECT
+    const text="Website ini dibuat untuk menyimpan kenangan-kenangan indah.\nSetiap foto dan video adalah bagian dari cerita yang tak terlupakan.";
+    const typing=document.getElementById('typingText');
+    let i=0;
+    function typeWriter(){if(i<text.length){typing.innerHTML+=text.charAt(i);i++;setTimeout(typeWriter,40);}}
+    window.addEventListener('scroll',()=>{
+      const about=document.getElementById('about');
+      const rect=about.getBoundingClientRect();
+      if(rect.top<window.innerHeight-150&&typing.innerHTML===""){typeWriter();}
+    });
+
+    // FOTO POPUP
+    const albumImgs=document.querySelectorAll('.album img');
+    albumImgs.forEach(img=>{
+      img.addEventListener('click',()=>{
+        popupImg.src=img.src;
+        popup.classList.add('active');
+      });
+    });
+    popup.addEventListener('click',()=>popup.classList.remove('active'));
+
+    // FOTO FADE-IN
+    const showAlbum=()=>{albumImgs.forEach(img=>{
+      const top=img.getBoundingClientRect().top;
+      if(top<window.innerHeight-100)img.classList.add('active');
+    });};
+    window.addEventListener('scroll',showAlbum);
+  </script>
+</body>
+</html>
